@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -31,7 +33,7 @@ class MainActivity : ComponentActivity() {
             MyMoviesTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    MediaItem()
+                    MediaList()
                 }
             }
         }
@@ -39,9 +41,30 @@ class MainActivity : ComponentActivity() {
 }
 
 @ExperimentalCoilApi
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun MediaItem() {
+fun MediaList() {
+    LazyColumn(
+        contentPadding = PaddingValues(4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        items(getMedia()) {
+            MediaListItem(it)
+        }
+    }
+}
+
+@ExperimentalCoilApi
+@Preview
+@Composable
+fun MediaListItemPreview() {
+    val mediaItem = MediaItem(1, "Item 1", "", MediaItem.Type.VIDEO)
+    MediaListItem(mediaItem = mediaItem)
+}
+
+@ExperimentalCoilApi
+@Composable
+fun MediaListItem(mediaItem: MediaItem) {
     Column {
         Box(
             modifier = Modifier
@@ -50,20 +73,22 @@ fun MediaItem() {
         ) {
             Image(
                 painter = rememberImagePainter(
-                    data = "https://lorempixel.com/400/400/people/1/"
+                    data = mediaItem.thumb
                 ),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
-            Icon(
-                Icons.Default.PlayCircleOutline,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(92.dp)
-                    .align(Alignment.Center),
-                tint = Color.White
-            )
+            if (mediaItem.type == MediaItem.Type.VIDEO) {
+                Icon(
+                    Icons.Default.PlayCircleOutline,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(92.dp)
+                        .align(Alignment.Center),
+                    tint = Color.White
+                )
+            }
         }
         Box(
             contentAlignment = Alignment.Center,
@@ -73,7 +98,7 @@ fun MediaItem() {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Title 1",
+                text = mediaItem.title,
                 style = MaterialTheme.typography.h6
             )
         }
