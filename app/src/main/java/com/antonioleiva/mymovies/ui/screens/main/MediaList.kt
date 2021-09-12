@@ -3,6 +3,7 @@ package com.antonioleiva.mymovies.ui.screens.main
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -19,18 +20,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.antonioleiva.mymovies.R
 import com.antonioleiva.mymovies.model.MediaItem
 import com.antonioleiva.mymovies.model.getMedia
 import com.antonioleiva.mymovies.ui.MyMoviesApp
+import com.antonioleiva.mymovies.ui.screens.shared.Thumb
 
 @ExperimentalFoundationApi
 @ExperimentalCoilApi
-@Preview
 @Composable
-fun MediaList(modifier: Modifier = Modifier) {
+fun MediaList(navController: NavHostController, modifier: Modifier = Modifier) {
     LazyVerticalGrid(
         cells = GridCells.Adaptive(dimensionResource(R.dimen.cell_min_width)),
         contentPadding = PaddingValues(dimensionResource(R.dimen.padding_xsmall)),
@@ -39,6 +41,7 @@ fun MediaList(modifier: Modifier = Modifier) {
         items(getMedia()) {
             MediaListItem(
                 mediaItem = it,
+                navController = navController,
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_xsmall))
             )
         }
@@ -47,41 +50,17 @@ fun MediaList(modifier: Modifier = Modifier) {
 
 @ExperimentalCoilApi
 @Composable
-fun MediaListItem(mediaItem: MediaItem, modifier: Modifier = Modifier) {
+fun MediaListItem(
+    mediaItem: MediaItem,
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
+            .clickable { navController.navigate("detail/${mediaItem.id}") }
     ) {
         Thumb(mediaItem)
         Title(mediaItem)
-    }
-}
-
-@ExperimentalCoilApi
-@Composable
-private fun Thumb(mediaItem: MediaItem) {
-    Box(
-        modifier = Modifier
-            .height(dimensionResource(R.dimen.cell_thumb_height))
-            .fillMaxWidth()
-    ) {
-        Image(
-            painter = rememberImagePainter(
-                data = mediaItem.thumb
-            ),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-        if (mediaItem.type == MediaItem.Type.VIDEO) {
-            Icon(
-                Icons.Default.PlayCircleOutline,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(dimensionResource(R.dimen.cell_play_icon_size))
-                    .align(Alignment.Center),
-                tint = Color.White
-            )
-        }
     }
 }
 
@@ -107,6 +86,6 @@ private fun Title(mediaItem: MediaItem) {
 fun MediaListItemPreview() {
     MyMoviesApp {
         val mediaItem = MediaItem(1, "Item 1", "", MediaItem.Type.VIDEO)
-        MediaListItem(mediaItem = mediaItem)
+        //MediaListItem(mediaItem = mediaItem, navController = navController)
     }
 }
