@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import coil.annotation.ExperimentalCoilApi
-import com.antonioleiva.mymovies.ui.Navigation
+import com.antonioleiva.mymovies.ui.navigation.Navigation
 
 @ExperimentalFoundationApi
 @ExperimentalCoilApi
