@@ -55,7 +55,10 @@ fun MediaListItem(
         modifier = modifier.clickable { onClick() }
     ) {
         Column {
-            Thumb(mediaItem)
+            Thumb(
+                mediaItem = mediaItem,
+                modifier = modifier.height(dimensionResource(R.dimen.cell_thumb_height))
+            )
             Title(mediaItem)
         }
     }

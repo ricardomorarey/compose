@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import coil.annotation.ExperimentalCoilApi
+import com.antonioleiva.mymovies.R
 import com.antonioleiva.mymovies.ui.MyMoviesApp
 
 @ExperimentalCoilApi
@@ -14,12 +16,9 @@ import com.antonioleiva.mymovies.ui.MyMoviesApp
 fun MainScreen(onNavigate: (Int) -> Unit) {
     MyMoviesApp {
         Scaffold(
-            topBar = { MainAppBar() }
+            topBar = { MainAppBar(stringResource(id = R.string.app_name)) }
         ) { padding ->
-            MediaList(
-                onClick = { onNavigate(it.id) },
-                modifier = Modifier.padding(padding)
-            )
+            MainContent(onNavigate = onNavigate, Modifier.padding(padding))
         }
 
     }
